@@ -424,20 +424,26 @@ omrsysinfo_process_exists(struct OMRPortLibrary *portLibrary, uintptr_t pid)
 	 * If sig is 0, then no signal is sent, but error checking is still performed.
 	 * By using signal == 0, kill just checks for the existence and accessibility of the process.
 	 */
+	      fprintf(stderr, "%s %d PDB_DEBUG %s pid=%zd\n", __FILE__, __LINE__, __FUNCTION__, pid);
 
 	if (0 == result) {
 		rc = 1; /* The process with pid exists and this process has sufficient permissions to send it a signal. */
+		    fprintf(stderr, "%s %d PDB_DEBUG %s result = 1\n", __FILE__, __LINE__, __FUNCTION__);
 	} else if (-1 == result) { /* note that kill() returns only 0 or -1 */
 		if (errno == ESRCH) {
+			fprintf(stderr, "%s %d PDB_DEBUG %s ESRCH\n", __FILE__, __LINE__, __FUNCTION__);
 			/* The kill() failed because was there are no processes or process groups corresponding to pid. */
 			rc = 0;
 		} else if (errno == EPERM) {
+			fprintf(stderr, "%s %d PDB_DEBUG %s EPERM\n", __FILE__, __LINE__, __FUNCTION__);
 			/* The target process exists but this process does not have permission to send it a signal. */
 			rc = 1;
 		} else {
 			rc = -1;
+			 fprintf(stderr, "%s %d PDB_DEBUG %s result = 1\n", __FILE__, __LINE__, __FUNCTION__);
 		}
 	}
+	 fprintf(stderr, "%s %d PDB_DEBUG %s rc=%zd\n", __FILE__, __LINE__, __FUNCTION__, rc);
 	return rc;
 }
 
